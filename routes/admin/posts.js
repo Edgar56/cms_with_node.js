@@ -13,6 +13,14 @@ router.all('/*', (req, res, next) => {
 
 router.get('/', (req, res) => {
 
+    Post.find({}).then(posts=>{
+
+        res,render('admin/posts', {posts:posts});
+
+    }).catch(error=>{
+        console.log("Could not show posts: " + error);
+    });
+
     res.render('/admin/posts');
 
 });
