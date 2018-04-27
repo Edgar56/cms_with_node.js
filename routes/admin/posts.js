@@ -15,13 +15,9 @@ router.get('/', (req, res) => {
 
     Post.find({}).then(posts=>{
 
-        res,render('admin/posts', {posts:posts});
+        res.render('admin/posts', {posts:posts});
 
-    }).catch(error=>{
-        console.log("Could not show posts: " + error);
     });
-
-    res.render('/admin/posts');
 
 });
 
@@ -64,6 +60,18 @@ router.post('/create', (req, res) => {
 
     // console.log(req.body);
 
+});
+
+//Edit route
+
+router.get('/edit/:id', (req,res)=>{
+
+
+    Post.findOne({_id: req.params.id}).then(post=>{
+
+        res.render('admin/posts/edit', {post:post});
+
+    });
 });
 
 

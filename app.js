@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 mongoose.Promise = global.Promise;
 
@@ -16,7 +16,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Set View Engine
 
-app.engine('handlebars', exphbs({defaultLayout: 'home'}));
+const {select} = require('./helpers/handlebars-helpers');
+
+app.engine('handlebars', exphbs({defaultLayout: 'home',helpers:{select:select()}}));
 app.set('view engine','handlebars');
 
 //Body Parser
