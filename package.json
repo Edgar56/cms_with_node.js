@@ -13,12 +13,18 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "connect-flash": "^0.1.1",
     "express": "^4.16.3",
+    "express-fileupload": "^0.4.0",
     "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
     "faker": "^4.1.0",
+    "fs": "0.0.1-security",
     "method-override": "^2.3.10",
-    "mongoose": "^5.0.15",
+    "moment": "^2.22.1",
+    "mongoose": "^5.0.17",
     "nodemon": "^1.17.3",
-    "npm": "^5.8.0"
+    "npm": "^6.0.0",
+    "path": "^0.12.7"
   }
 }

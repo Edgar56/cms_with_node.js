@@ -21,17 +21,13 @@ router.post('/generate-fake-posts', (req, res) => {
         let post = new Post();
 
         post.title = faker.name.title();
-        post.status = faker.random.arrayElement(["public","private","draft"]);;
+        post.status = faker.random.arrayElement(["public","private","draft"]);
         post.allowComments = faker.random.boolean();
         post.body = faker.lorem.sentence();
 
         post.save(function (err) {
             if (err) throw  err;
         });
-
-
-
-
 
     }
 

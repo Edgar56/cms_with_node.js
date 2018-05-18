@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../../models/Post');
+const {isEmpty, uploadDir} = require('../../helpers/upload-helper');
+const fs = require('fs');
+
 
 
 router.all('/*', (req, res, next) => {
@@ -30,32 +33,73 @@ router.get('/create', (req, res) => {
 
 router.post('/create', (req, res) => {
 
-    let allowComments = true;
-    if (req.body.allowComments) {
-        allowComments = true;
-    } else {
-        allowComments = false;
+    let errors = [];
+
+    if (!req.body.title) {
+        errors.push({message: 'Please add a title'});
+
+    }
+        if (!req.body.body) {
+        errors.push({message: 'Please add a description'});
+
     }
 
-    const newPost = new Post({
+    if (errors.length > 0) {
+        res.render('admin/posts/create', {
+            errors: errors
+        })
+    }else
+        {
 
-        title: req.body.title,
-        status: req.body.status,
-        allowComments: allowComments,
-        body: req.body.body
+            let filename = 'lambo_hurican.jpg';
+
+            if (!isEmpty(req.files)) {
+
+                let file = req.files.file;
+                filename = Date.now() + '-' + file.name;
 
 
-    });
+                file.mv('./public/uploads/' + filename, (err) => {
 
-    newPost.save().then(savedPost => {
+                    if (err) throw  err;
 
-        console.log(savedPost);
+                });
+            }
 
-        res.redirect('/admin/posts');
+            let allowComments = true;
+            if (req.body.allowComments) {
+                allowComments = true;
+            } else {
+                allowComments = false;
+            }
 
-    }).catch(error => {
-        console.log("Could not save post: " + error);
-    });
+            const newPost = new Post({
+
+                title: req.body.title,
+                status: req.body.status,
+                allowComments: allowComments,
+                body: req.body.body,
+                file: filename
+
+
+            });
+
+            newPost.save().then(savedPost => {
+
+                req.flash('success-message', `Post ${savedPost.title} was created successfully `);
+
+               // console.log(savedPost);
+
+                res.redirect('/admin/posts');
+
+            }).catch(error => {
+                console.log("Could not save post: " + error);
+            });
+
+
+        }
+
+
 
 
     // console.log(req.body);
@@ -91,18 +135,42 @@ router.put('/edit/:id', (req, res) => {
             post.allowComments = allowComments;
             post.body = req.body.body;
 
+
+            if (!isEmpty(req.files)) {
+
+                let file = req.files.file;
+                filename = Date.now() + '-' + file.name;
+                post.file = filename;
+
+                file.mv('./public/uploads/' + filename, (err) => {
+
+                    if (err) throw  err;
+                });
+            }
+
+
             post.save().then(updatedPost => {
+
+                req.flash('success-message', 'Post  was successfully updated');
+
+
                 res.redirect('/admin/posts');
             });
         });
 });
 
-router.delete('/:id', (req,res)=>
-{
+router.delete('/:id', (req, res) => {
+
     Post.remove({_id: req.params.id})
-        .then(result=>{
+
+        .then(result => {
+
+
+            req.flash('success-message', 'Post was successfully deleted');
             res.redirect('/admin/posts');
+
         });
-})
+
+});
 
 module.exports = router;
