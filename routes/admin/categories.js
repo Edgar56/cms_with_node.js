@@ -10,7 +10,25 @@ router.all('/*', (req, res, next) => {
 
 router.get('/', (req, res) => {
 
-    res.render('admin/categories/');
+    Category.find({}).then(categories=>{
+        res.render('admin/categories/index',{categories:categories});
+    });
+});
+
+router.post('/create', (req, res) => {
+    const newCategory = new Category({
+        name: req.body.name
+    });
+    newCategory.save(savedCategory =>{
+       res.redirect('/admin/categories');
+    });
+});
+
+router.get('/edit/:id', (req, res) => {
+
+    Category.findOne({_id: req.params.id}).then(category=>{
+        res.render('admin/categories/edit',{category:category});
+    });
 });
 
 
