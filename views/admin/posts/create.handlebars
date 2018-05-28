@@ -25,6 +25,19 @@
       </div>
 
     <div class="form-group">
+        <label for="status">Category</label>
+        <select name="category" id="status" class="form-control">
+
+            {{#each categories}}
+
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+
+
+    <div class="form-group">
         <label for="status">Status</label>
         <select name="status" id="status" class="form-control">
             <option value="public">Public</option>
@@ -32,6 +45,9 @@
             <option value="draft">Draft</option>
         </select>
     </div>
+
+
+
 
     <div class="form-check">
         <label for="allowComments" class="form-check-label">
