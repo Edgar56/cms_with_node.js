@@ -8,12 +8,15 @@ const methodOverride = require('method-override');
 const uplaod = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
+const {mongoDbUrl} = require('./config/database');
+const passport = require('passport');
+
 
 mongoose.Promise = global.Promise;
 
 
 //Mongodb with mongoose
-mongoose.connect('mongodb://localhost:27017/cms').then(db => {
+mongoose.connect(mongoDbUrl).then(db => {
     console.log('MONGO connected');
 }).catch(error => console.log("Could not connect: " + error));
 
@@ -52,6 +55,11 @@ app.use(session({
 
 
 app.use(flash());
+
+//Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //Local variables using Middleware
 
