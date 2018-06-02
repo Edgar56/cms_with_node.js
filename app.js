@@ -64,8 +64,11 @@ app.use(passport.session());
 //Local variables using Middleware
 
 app.use((req,res, next)=>{
+
+    res.locals.user = req.user || null;
     res.locals.success_message = req.flash('success-message');
     res.locals.error_message = req.flash('error_message');
+    res.locals.error = req.flash('error');
     next();
 
 });
