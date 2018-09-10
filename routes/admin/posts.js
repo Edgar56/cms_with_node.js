@@ -4,11 +4,11 @@ const Post = require('../../models/Post');
 const Category = require('../../models/Category');
 const {isEmpty, uploadDir} = require('../../helpers/upload-helper');
 const fs = require('fs');
+//const {userAuthenticated} = require('../../helpers/authentication');
 
 
 
-
-router.all('/*', (req, res, next) => {
+router.all('/*',  (req, res, next) => {
 
     req.app.locals.layout = 'admin';
 
@@ -86,7 +86,8 @@ router.post('/create', (req, res) => {
                 allowComments: allowComments,
                 body: req.body.body,
                 category: req.body.category,
-                file: filename
+                file: filename,
+                //author: req.body.author
 
 
             });
@@ -172,13 +173,25 @@ router.put('/edit/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 
-    Post.remove({_id: req.params.id})
+    Post.findOne({_id: req.params.id})
+        .populate('comments')
+        .then(post => {
 
-        .then(result => {
+            fs.unlink(uploadDir + post.file,(er)=>{
+
+                if(!post.comments.length < 1) {
+                post.comments.forEach(comment =>{
+                    comment.remove();
+                });
+                }
+                post.remove().then(postRemoved=>{
+                    req.flash('success-message', 'Post was successfully deleted');
+                    res.redirect('/admin/posts');
+                });
+
+            });
 
 
-            req.flash('success-message', 'Post was successfully deleted');
-            res.redirect('/admin/posts');
 
         });
 

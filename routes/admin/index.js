@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const faker = require('faker');
 const Post = require('../../models/Post');
+//const {userAuthenticated} = require('../../helpers/authentication'); turi buti route.all ()
 
-router.all('/*', (req, res, next) => {
+router.all('/*',  (req, res, next) => {
     req.app.locals.layout = 'admin';
     next();
 });

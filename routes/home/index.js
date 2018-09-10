@@ -80,6 +80,14 @@ router.post('/login', (req, res, next) => {
 
     })(req, res, next);
 });
+//Logout
+router.get('/logout',(req,res)=>{
+
+    req.logout();
+    res.redirect('/login');
+
+});
+
 
 //Register Page
 
