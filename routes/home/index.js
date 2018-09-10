@@ -89,6 +89,14 @@ router.get('/logout',(req,res)=>{
 });
 
 
+//Logout
+router.get('/logout', (req,res)=>{
+   req.logout();
+   res.redirect('/login');
+
+
+});
+
 //Register Page
 
 router.get('/register', (req, res) => {
